@@ -1,6 +1,7 @@
-FROM golang:1.17
+ARG  GO_VERSION
+FROM golang:${GO_VERSION}
 
-LABEL maintainer="Ving <ving@nivin.cn>"
+LABEL maintainer="fzf <ysfzf@hotmail.com>"
 
 ENV GOPROXY https://goproxy.cn,direct
 
@@ -23,15 +24,8 @@ RUN sed -i 's/deb.debian.org/mirrors.tuna.tsinghua.edu.cn/' /etc/apt/sources.lis
 USER root
 RUN GOPROXY=https://goproxy.cn/,direct go install github.com/zeromicro/go-zero/tools/goctl@latest
 
-# 安装 protoc
-USER root
-RUN curl -L -o /tmp/protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v3.19.1/protoc-3.19.1-linux-x86_64.zip && \
-    unzip -d /tmp/protoc /tmp/protoc.zip && \
-    mv /tmp/protoc/bin/protoc $GOPATH/bin
-
-# 安装 protoc-gen-go
-USER root
-RUN go get -u github.com/golang/protobuf/protoc-gen-go@v1.4.0
+# 安装环境
+RUN goctl env check -i -f
 
 # $GOPATH/bin添加到环境变量中
 ENV PATH $GOPATH/bin:$PATH
@@ -45,11 +39,4 @@ RUN apt-get clean && \
 # 设置工作目录
 WORKDIR /usr/src/code
 
-EXPOSE 8000
-EXPOSE 8001
-EXPOSE 8002
-EXPOSE 8003
-EXPOSE 9000
-EXPOSE 9001
-EXPOSE 9002
-EXPOSE 9003
+ 
