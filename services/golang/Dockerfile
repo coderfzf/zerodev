@@ -1,7 +1,7 @@
 ARG  GO_VERSION
 FROM golang:${GO_VERSION}
 
-LABEL maintainer="fzf <ysfzf@hotmail.com>"
+MAINTAINER fzf ysfzf@hotmail.com
 
 ENV GOPROXY https://goproxy.cn,direct
 
