@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export MC="-j$(nproc)"
+export MC="-j$(nproc)"   
 
 echo
 echo "============================================"
