@@ -1,5 +1,4 @@
 version: '3.5'
-# 微服务+MySql+Redis
 networks:
   backend:
     driver: ${NETWORKS_DRIVER}
@@ -51,23 +50,17 @@ services:
     restart: always                       
 
   php:
-    build:
-      context: ./services/php
-      args:
-        PHP_VERSION: php:${PHP_VERSION}-fpm-alpine3.15
-        CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
-        PHP_EXTENSIONS: ${PHP_EXTENSIONS}
-        TZ: "$TZ"
+    image: ${PHP_VERSION}
     container_name: php
     volumes:
       - ${CODE_PATH}:/www/:cached
-      - ${PHP_CONF_FILE}:/usr/local/etc/php/php.ini:cached
-      - ${PHP_FPM_CONF_FILE}:/usr/local/etc/php-fpm.d/www.conf:cached
+      - ./services/php/php.ini:/usr/local/etc/php/php.ini:cached
+      - ./services/php/php-fpm.conf:/usr/local/etc/php-fpm.d/www.conf:cached
       - ${LOG_PATH}/php:/var/log/php:cached
-      - ${DATA_DIR}/composer:/tmp/composer
+      - ${DATA_PATH}/composer:/tmp/composer
       - ${LOG_PATH}/supervisor:/var/log/supervisor/:rw
-      - ${SUPERVISOR_CONFIG}:/etc/supervisor/conf.d/:rw
-      - ${SUPERVISOR_CONF_FILE}:/etc/supervisor/supervisord.conf:ro
+      - ./services/php/conf.d/:/etc/supervisor/conf.d/:rw
+      - ./services/php/supervisord.conf:/etc/supervisor/supervisord.conf:ro
     restart: always
     cap_add:
       - SYS_PTRACE
@@ -77,7 +70,7 @@ services:
       - |
         supervisord -n -c /etc/supervisor/supervisord.conf
     networks:
-      - default
+      - backend
 
   etcd:                                   
     image: bitnami/etcd:${ETCD_VERSION}                   
