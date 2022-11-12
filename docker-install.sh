@@ -6,4 +6,7 @@ curl -L https://get.daocloud.io/docker/compose/releases/download/v2.6.1/docker-c
 
 chmod +x /usr/local/bin/docker-compose
 
+systemctl start docker
+systemctl enable docker
+
 docker-compose -v
