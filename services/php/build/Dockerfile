@@ -1,7 +1,7 @@
 FROM php:8.1.16-fpm-alpine3.16
 
 ARG TZ=Asia/Shanghai
-ARG PHP_EXTENSIONS=pdo_mysql,mysqli,mbstring,gd,curl,opcache,swoole,zip,redis,memcached,pcntl,bcmath,mongodb
+ARG PHP_EXTENSIONS=pdo_mysql,mysqli,mbstring,gd,curl,opcache,swoole,zip,redis,memcached,pcntl,bcmath,mongodb,rdkafka
 ARG CONTAINER_PACKAGE_URL=mirrors.aliyun.com
 
 RUN if [ $CONTAINER_PACKAGE_URL ] ; then sed -i "s/dl-cdn.alpinelinux.org/${CONTAINER_PACKAGE_URL}/g" /etc/apk/repositories ; fi
@@ -34,5 +34,6 @@ RUN apk --no-cache add shadow && usermod -u 1000 www-data && groupmod -g 1000 ww
 # supervisor
 RUN apk add supervisor \
 	&& rm -rf /var/cache/apk/*
+
 
 WORKDIR /www
