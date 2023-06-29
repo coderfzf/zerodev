@@ -1,11 +1,10 @@
 FROM php:7.4.33-fpm-alpine3.16
 
-ARG PHP_EXTENSIONS=pdo_mysql mysqli mbstring gd curl opcache swoole zip redis memcached pcntl bcmath mongodb rdkafka xdebug
- 
-ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+# https://github.com/mlocati/docker-php-extension-installer.git
+COPY ./install-php-extensions  /usr/local/bin/install-php-extensions
 
 RUN chmod +x /usr/local/bin/install-php-extensions && \
-    install-php-extensions $PHP_EXTENSIONS
+    install-php-extensions pdo_mysql mysqli mbstring gd curl opcache swoole zip redis memcached pcntl bcmath mongodb rdkafka xdebug grpc
 
 RUN install-php-extensions @composer
 # php image's www-data user uid & gid are 82, change them to 1000 (primary user)
